@@ -1,6 +1,6 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/banner-dark.png">
-  <img src="./.github/assets/banner-light.png" alt="Suite: documents and spreadsheets, light and private" width="100%">
+  <img src="./.github/assets/banner-light.png" alt="Suite: documents, spreadsheets and slides, light and private" width="100%">
 </picture>
 
 <p align="center">
@@ -27,20 +27,20 @@
 
 <br>
 
-<p align="center"><img src="./.github/assets/showcase.png" width="92%" alt="DOC and XLS side by side"></p>
+<p align="center"><img src="./.github/assets/showcase.png" width="92%" alt="DOC, XLS and PPT side by side"></p>
 
 <br>
 
 ## Overview
 
-Suite is a light office suite for Windows with two apps: **DOC** for documents and **XLS** for spreadsheets. One small installer asks which ones you want and installs only those. Both open and save Microsoft Office files, run without an internet connection and keep themselves up to date.
+Suite is a light office suite for Windows with three apps: **DOC** for documents, **XLS** for spreadsheets and **PPT** for presentations. One small installer asks which ones you want and installs only those. They open and save Microsoft Office files, run without an internet connection and keep themselves up to date; updating one updates the others too.
 
 |  |  |
 |:--|:--|
-| **~200 KB** installer | Downloads only the apps you pick; the offline installer (~18 MB) carries both |
+| **~200 KB** installer | Downloads only the apps you pick; the offline installer carries all three |
 | **0** telemetry | No account, no ads, no analytics. Files stay on your computer |
-| **2** apps | DOC (~15 MB) and XLS (~3 MB), installed together or on their own |
-| **17** file formats | Word, Excel, OpenDocument, RTF, PDF, Markdown, HTML, CSV and more |
+| **3** apps | DOC, XLS and PPT, installed together or on their own |
+| **21** file formats | Word, Excel, PowerPoint, OpenDocument, RTF, PDF, Markdown, HTML, CSV and more |
 | **0** admin rights | Installs per user; no UAC prompt |
 
 <br>
@@ -66,6 +66,16 @@ Opens and saves Excel files with their formulas. Charts, pivot tables, slicers, 
 
 </td>
 </tr>
+<tr>
+<td colspan="2" valign="top">
+
+#### PPT · presentations
+Opens and saves PowerPoint files. Slide layouts and themes, text with bullets and numbering, shapes, pictures, icons and tables; speaker notes, transitions, slide show with presenter view, and PDF export.
+
+<sub>`.pptx` `.pptm` `.ppsx` `.potx`</sub>
+
+</td>
+</tr>
 </table>
 
 <table>
@@ -77,6 +87,12 @@ Opens and saves Excel files with their formulas. Charts, pivot tables, slicers, 
 <td align="center"><sub><b>DOC</b>: a proposal with headings, a table and a list</sub></td>
 <td align="center"><sub><b>XLS</b>: formulas and a chart that follows the data</sub></td>
 </tr>
+<tr>
+<td colspan="2"><img src="./.github/assets/app-ppt.png" alt="PPT"></td>
+</tr>
+<tr>
+<td colspan="2" align="center"><sub><b>PPT</b>: slides with a theme, bullets and shapes</sub></td>
+</tr>
 </table>
 
 <br>
@@ -84,17 +100,17 @@ Opens and saves Excel files with their formulas. Charts, pivot tables, slicers, 
 ## Install
 
 1. Download **[Suite_Setup.exe](https://github.com/vasileiostripolidis/suite-releases/releases/latest/download/Suite_Setup.exe)** and open it.
-2. Tick **DOC**, **XLS** or both.
+2. Tick **DOC**, **XLS**, **PPT**, or any combination.
 3. Press **Install**. The apps appear in the Start menu.
 
 | Installer | Size | When to use it |
 |:--|:--|:--|
 | `Suite_Setup.exe` | ~200 KB | Normal choice. Fetches the latest version of the apps you pick |
-| `Suite_Setup_Offline.exe` | ~18 MB | Computers without internet, or a copy to keep on a USB stick |
+| `Suite_Setup_Offline.exe` | ~25 MB | Computers without internet, or a copy to keep on a USB stick |
 
-Windows 10 / 11, 64-bit. The installers are not code-signed yet, so SmartScreen may ask once: *More info → Run anyway*. Run the installer again any time to add the other app or update both.
+Windows 10 / 11, 64-bit. The installers are not code-signed yet, so SmartScreen may ask once: *More info → Run anyway*. Run the installer again any time to add another app.
 
-**Updates:** each app checks for new versions by itself and installs them only after you confirm. Updates are signed with an Ed25519 key; an unsigned or altered package is rejected. Documents and settings are kept.
+**Updates:** each app checks for new versions by itself and installs them only after you confirm. Updating one app also updates the other installed apps (an open app is updated as soon as you close it). Updates are signed with an Ed25519 key; an unsigned or altered package is rejected. Documents and settings are kept.
 
 <br>
 
@@ -120,7 +136,7 @@ Found a problem? [Open an issue](https://github.com/vasileiostripolidis/suite-re
 
 ### 🇬🇷 Ελληνικά
 
-Η **Suite** είναι μια ελαφριά σουίτα γραφείου για Windows με δύο εφαρμογές: το **DOC** για κείμενα (ανοίγει και αποθηκεύει αρχεία Word) και το **XLS** για υπολογιστικά φύλλα (ανοίγει και αποθηκεύει αρχεία Excel). Κατεβάζεις ένα μικρό αρχείο εγκατάστασης και διαλέγεις τι θα εγκατασταθεί. Δουλεύουν χωρίς internet, χωρίς λογαριασμό και χωρίς παρακολούθηση, και ενημερώνονται μόνες τους.
+Η **Suite** είναι μια ελαφριά σουίτα γραφείου για Windows με τρεις εφαρμογές: το **DOC** για κείμενα (αρχεία Word), το **XLS** για υπολογιστικά φύλλα (αρχεία Excel) και το **PPT** για παρουσιάσεις (αρχεία PowerPoint). Κατεβάζεις ένα μικρό αρχείο εγκατάστασης και διαλέγεις τι θα εγκατασταθεί. Δουλεύουν χωρίς internet, χωρίς λογαριασμό και χωρίς παρακολούθηση, και ενημερώνονται μόνες τους· η ενημέρωση της μίας ενημερώνει και τις άλλες.
 
 **[Λήψη για Windows](https://github.com/vasileiostripolidis/suite-releases/releases/latest/download/Suite_Setup.exe)** · [Χωρίς σύνδεση](https://github.com/vasileiostripolidis/suite-releases/releases/latest/download/Suite_Setup_Offline.exe) · [Ιστοσελίδα](https://vasileiostripolidis.github.io/suite-releases/)
 

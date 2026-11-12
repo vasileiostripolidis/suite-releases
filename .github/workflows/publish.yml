@@ -1,0 +1,126 @@
+# Δημοσίευση έκδοσης της σουίτας. Τρέχει εδώ (δημόσιο αποθετήριο, χωρίς χρέωση λεπτών) μετά το χτίσιμο των
+# εφαρμογών στο ιδιωτικό αποθετήριο, που ανεβάζει τα υπογεγραμμένα αρχεία εγκατάστασης σε μια προσωρινή
+# (draft) έκδοση «staging-…». Εδώ φτιάχνονται τα doc.json/xls.json/ppt.json (ενημερώσεις), το Suite_Setup
+# και το Suite_Setup_Offline, και δημοσιεύεται η νέα «τελευταία έκδοση». Δεν χρειάζεται κανένα secret.
+# Το πρόγραμμα εγκατάστασης (.github/installer) είναι αντίγραφο του installer/ του ιδιωτικού αποθετηρίου.
+name: Δημοσίευση
+
+on:
+  workflow_dispatch:
+    inputs:
+      staging:
+        description: 'Η προσωρινή έκδοση με τα νέα αρχεία (staging-…)· κενό = μόνο νέο Suite_Setup'
+        default: ''
+      notes:
+        description: 'Σημειώσεις έκδοσης'
+        default: ''
+      test:
+        description: 'Δοκιμή εγκατάστασης σε Windows μετά τη δημοσίευση'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency: { group: publish, cancel-in-progress: false }
+
+env:
+  PUB: ${{ github.repository }}
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { sparse-checkout: .github/installer }
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq nsis
+      - name: Νέα αρχεία εγκατάστασης
+        run: |
+          mkdir -p new out apps-bin
+          if [ -n "${{ inputs.staging }}" ]; then gh release download "${{ inputs.staging }}" -R "$PUB" -D new --pattern '*-setup.exe*'; fi
+          ls -la new
+      - name: Αρχεία ενημερώσεων (doc.json, xls.json, ppt.json)
+        id: j
+        env:
+          NOTES: ${{ inputs.notes }}
+        run: |
+          set -e
+          N=$(gh release list -R "$PUB" --limit 100 --json tagName --jq '[.[].tagName | select(test("^r[0-9]+$")) | ltrimstr("r") | tonumber] | max // 0')
+          TAG="r$((N + 1))"; echo "tag=$TAG" >> "$GITHUB_OUTPUT"; export TAG
+          for a in doc xls ppt; do curl -fsSL -o cur-$a.json "https://github.com/$PUB/releases/latest/download/$a.json" || echo '{}' > cur-$a.json; done
+          python3 - <<'PY'
+          import json, os, glob, datetime
+          tag = os.environ['TAG']; pub = os.environ['PUB']; notes = os.environ.get('NOTES', '')
+          now = datetime.datetime.now(datetime.UTC).strftime('%Y-%m-%dT%H:%M:%SZ')
+          summary = []
+          for app, NAME in (('doc', 'DOC'), ('xls', 'XLS'), ('ppt', 'PPT')):
+              cur = json.load(open(f'cur-{app}.json'))
+              exes = glob.glob(f'new/{NAME}_*_x64-setup.exe')
+              if exes:
+                  exe = os.path.basename(exes[0]); ver = exe.split('_')[1]
+                  sig = open(exes[0] + '.sig').read().strip()
+                  p = {'signature': sig, 'url': f'https://github.com/{pub}/releases/download/{tag}/{exe}'}
+                  plats = {'windows-x86_64': p, 'windows-x86_64-nsis': p}
+                  if app == 'doc': plats['windows-x86_64-insider'] = p
+                  cur = {'version': ver, 'notes': notes or f'{NAME} {ver}', 'pub_date': now, 'platforms': plats}
+                  summary.append(f'**{NAME} {ver}** (νέα)')
+              elif cur.get('version'):
+                  summary.append(f'{NAME} {cur["version"]}')
+              if cur.get('version'): json.dump(cur, open(f'out/{app}.json', 'w'), ensure_ascii=False, indent=2)
+          body = 'Περιέχει: ' + ' · '.join(summary) + '\n\n'
+          if notes: body += notes + '\n\n'
+          body += '**Suite_Setup.exe**: κατεβάζει και εγκαθιστά μόνο τις εφαρμογές που επιλέγεις.\n**Suite_Setup_Offline.exe**: περιέχει όλες τις εφαρμογές, για υπολογιστές χωρίς Internet.\n'
+          open('body.md', 'w').write(body)
+          open('title.txt', 'w').write(' · '.join(s.replace('**', '').split(' (')[0] for s in summary))
+          PY
+          cat body.md
+      - name: Suite_Setup και Suite_Setup_Offline
+        run: |
+          set -e
+          for app in doc xls ppt; do
+            NAME=$(echo $app | tr a-z A-Z)
+            F=$(ls new/${NAME}_*_x64-setup.exe 2>/dev/null | head -1 || true)
+            if [ -n "$F" ]; then cp "$F" apps-bin/$NAME.exe
+            elif [ -f out/$app.json ]; then curl -fsSL -o apps-bin/$NAME.exe "$(jq -r '.platforms["windows-x86_64"].url' out/$app.json)"
+            else echo "Το $NAME δεν έχει ακόμα έκδοση."; continue; fi
+          done
+          ls -la apps-bin
+          cd .github/installer
+          V=1.1.${{ github.run_number }}
+          makensis -V2 -DVERSION=$V suite.nsi
+          PPT=""; [ -f ../../apps-bin/PPT.exe ] && PPT="-DPPT_EXE=../../apps-bin/PPT.exe"
+          makensis -V2 -DOFFLINE -DVERSION=$V -DDOC_EXE=../../apps-bin/DOC.exe -DXLS_EXE=../../apps-bin/XLS.exe $PPT suite.nsi
+          mv Suite_Setup.exe Suite_Setup_Offline.exe ../../out/
+          cp ../../new/*-setup.exe ../../out/ 2>/dev/null || true
+          ls -la ../../out
+      - name: Δημοσίευση
+        run: gh release create "${{ steps.j.outputs.tag }}" -R "$PUB" --target main --title "$(cat title.txt)" --notes-file body.md --latest out/*
+      - name: Έλεγχος δημοσίευσης
+        run: |
+          for f in $(ls out | grep -E '\.json$|^Suite_'); do
+            for i in $(seq 1 24); do curl -fsSIL -o /dev/null "https://github.com/$PUB/releases/latest/download/$f" && break; sleep 10; done
+            curl -fsSIL -o /dev/null "https://github.com/$PUB/releases/latest/download/$f" && echo "ok $f" || { echo "ΛΕΙΠΕΙ $f"; exit 1; }
+          done
+          for a in doc xls ppt; do curl -fsSL "https://github.com/$PUB/releases/latest/download/$a.json" 2>/dev/null | jq -r '"\(.version)"' || true; done
+      - name: Διαγραφή της προσωρινής έκδοσης
+        if: always() && inputs.staging != ''
+        run: gh release delete "${{ inputs.staging }}" -R "$PUB" --yes --cleanup-tag || true
+
+  test:
+    needs: publish
+    if: inputs.test
+    runs-on: windows-latest
+    steps:
+      - name: Σιωπηλή εγκατάσταση από την τελευταία έκδοση
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $u = "https://github.com/$env:PUB/releases/latest/download"
+          Invoke-WebRequest "$u/Suite_Setup.exe" -OutFile Suite_Setup.exe; Invoke-WebRequest "$u/Suite_Setup_Offline.exe" -OutFile Suite_Setup_Offline.exe
+          function Installed($n) { Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\$n" }
+          function Run($exe, $apps) { $p = Start-Process -FilePath ".\$exe" -ArgumentList '/S', "/APPS=$apps" -Wait -PassThru; "$exe /APPS=$apps → κωδικός $($p.ExitCode)"; if ($p.ExitCode -ne 0) { throw "αποτυχία $exe" } }
+          Run 'Suite_Setup.exe' 'doc,xls,ppt'
+          foreach ($n in 'DOC', 'XLS', 'PPT') { if (-not (Installed $n)) { throw "Δεν εγκαταστάθηκε το $n" }; "$n " + (Get-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\$n").DisplayVersion }
+          Run 'Suite_Setup_Offline.exe' 'ppt'
+          'Όλοι οι έλεγχοι πέρασαν.'
