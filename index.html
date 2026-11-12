@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Suite: DOC & XLS</title>
-<meta name="description" content="Suite: ελαφριά σουίτα γραφείου για Windows. DOC για κείμενα (Word), XLS για υπολογιστικά φύλλα (Excel). Δωρεάν, χωρίς σύνδεση, χωρίς παρακολούθηση.">
+<title>Suite: DOC, XLS & PPT</title>
+<meta name="description" content="Suite: ελαφριά σουίτα γραφείου για Windows. DOC για κείμενα (Word), XLS για υπολογιστικά φύλλα (Excel), PPT για παρουσιάσεις (PowerPoint). Δωρεάν, χωρίς σύνδεση, χωρίς παρακολούθηση.">
 <meta name="theme-color" content="#0d1117">
 <link rel="icon" href="suite.png" type="image/png">
-<meta property="og:title" content="Suite: DOC & XLS">
+<meta property="og:title" content="Suite: DOC, XLS & PPT">
 <meta property="og:description" content="A light, private office suite for Windows.">
 <meta property="og:image" content="https://vasileiostripolidis.github.io/suite-releases/suite.png">
 <style>
@@ -39,8 +39,10 @@ h1{font-size:clamp(40px,6vw,64px);line-height:1.05;margin:12px 0 18px;letter-spa
 .small{color:var(--mute);font-size:13px;margin-top:14px}
 .stack{position:relative;height:320px}
 .stack img{position:absolute;width:210px;filter:drop-shadow(0 24px 40px rgba(0,0,0,.55))}
-.stack .d{left:8%;top:0;transform:rotate(-8deg)}
-.stack .x{left:42%;top:60px;transform:rotate(6deg)}
+.stack img{width:170px}
+.stack .d{left:0;top:10px;transform:rotate(-9deg)}
+.stack .x{left:30%;top:70px;transform:rotate(2deg)}
+.stack .p{left:60%;top:20px;transform:rotate(10deg)}
 section{padding:56px 0;border-top:1px solid var(--line)}
 h2{font-size:30px;letter-spacing:-.5px;margin:0 0 8px}
 .sub{color:var(--mute);margin:0 0 32px}
@@ -49,6 +51,8 @@ h2{font-size:30px;letter-spacing:-.5px;margin:0 0 8px}
 .card:before{content:"";position:absolute;inset:0 0 auto 0;height:3px}
 .card.doc:before{background:var(--blue)}
 .card.xls:before{background:var(--green)}
+.card.ppt:before{background:#c4482a}
+.card.ppt{grid-column:1/-1}
 .card .head{display:flex;gap:16px;align-items:center;margin-bottom:14px}
 .card .head img{width:56px;height:56px}
 .card h3{margin:0;font-size:22px}
@@ -95,19 +99,19 @@ html[lang=en] [data-en]{display:revert}
   <div>
     <div class="tag"><span data-el>Δωρεάν · για Windows</span><span data-en>Free · for Windows</span></div>
     <h1><span data-el>Η σουίτα γραφείου που δεν σε βαραίνει.</span><span data-en>The office suite that stays out of your way.</span></h1>
-    <p class="lead"><span data-el><b>DOC</b> για κείμενα και <b>XLS</b> για υπολογιστικά φύλλα. Ανοίγουν και αποθηκεύουν αρχεία Word και Excel, δουλεύουν χωρίς internet και δεν στέλνουν τίποτα πουθενά.</span><span data-en><b>DOC</b> for documents and <b>XLS</b> for spreadsheets. They open and save Word and Excel files, work offline and send nothing anywhere.</span></p>
+    <p class="lead"><span data-el><b>DOC</b> για κείμενα, <b>XLS</b> για υπολογιστικά φύλλα και <b>PPT</b> για παρουσιάσεις. Ανοίγουν και αποθηκεύουν αρχεία Word, Excel και PowerPoint, δουλεύουν χωρίς internet και δεν στέλνουν τίποτα πουθενά.</span><span data-en><b>DOC</b> for documents, <b>XLS</b> for spreadsheets and <b>PPT</b> for presentations. They open and save Word, Excel and PowerPoint files, work offline and send nothing anywhere.</span></p>
     <div class="cta">
       <a class="btn main" href="https://github.com/vasileiostripolidis/suite-releases/releases/latest/download/Suite_Setup.exe"><span data-el>Λήψη για Windows</span><span data-en>Download for Windows</span> ↓</a>
       <a class="btn alt" href="#apps"><span data-el>Τι περιέχει</span><span data-en>What's inside</span></a>
     </div>
     <div class="small"><span data-el>Ένα αρχείο εγκατάστασης· διαλέγεις εσύ τι θα εγκατασταθεί. Windows 10 / 11.</span><span data-en>One installer; you choose what gets installed. Windows 10 / 11.</span></div>
   </div>
-  <div class="stack" aria-hidden="true"><img class="d" src="doc.png" alt=""><img class="x" src="xls.png" alt=""></div>
+  <div class="stack" aria-hidden="true"><img class="d" src="doc.png" alt=""><img class="x" src="xls.png" alt=""><img class="p" src="ppt.png" alt=""></div>
 </div></div>
 
 <section id="apps"><div class="wrap">
-  <h2><span data-el>Δύο εφαρμογές, ένα σπίτι</span><span data-en>Two apps, one home</span></h2>
-  <p class="sub"><span data-el>Εγκατέστησε τη μία, την άλλη ή και τις δύο. Η καθεμιά ενημερώνεται μόνη της.</span><span data-en>Install one, the other, or both. Each one keeps itself up to date.</span></p>
+  <h2><span data-el>Τρεις εφαρμογές, ένα σπίτι</span><span data-en>Three apps, one home</span></h2>
+  <p class="sub"><span data-el>Εγκατέστησε όποιες θέλεις. Ενημερώνονται μόνες τους, και η ενημέρωση της μίας ενημερώνει και τις άλλες.</span><span data-en>Install any of them. They keep themselves up to date, and updating one updates the others.</span></p>
   <div class="apps">
     <div class="card doc">
       <div class="head"><img src="doc.png" alt=""><div><h3>DOC</h3><span data-el>Επεξεργαστής κειμένου</span><span data-en>Word processor</span></div></div>
@@ -145,6 +149,22 @@ html[lang=en] [data-en]{display:revert}
       </ul>
       <div class="fmt"><code>.xlsx</code><code>.xlsm</code><code>.xltx</code><code>.xls</code><code>.ods</code><code>.csv</code><code>.tsv</code></div>
     </div>
+    <div class="card ppt">
+      <div class="head"><img src="ppt.png" alt=""><div><h3>PPT</h3><span data-el>Παρουσιάσεις</span><span data-en>Presentations</span></div></div>
+      <ul data-el>
+        <li>Ανοίγει και αποθηκεύει αρχεία PowerPoint</li>
+        <li>Διατάξεις, θέματα, σχήματα, εικόνες, εικονίδια και πίνακες</li>
+        <li>Σημειώσεις ομιλητή, μεταβάσεις, προβολή και προβολή παρουσιαστή</li>
+        <li>Εξαγωγή σε PDF και εικόνα, εκτύπωση</li>
+      </ul>
+      <ul data-en>
+        <li>Opens and saves PowerPoint files</li>
+        <li>Layouts, themes, shapes, pictures, icons and tables</li>
+        <li>Speaker notes, transitions, slide show and presenter view</li>
+        <li>PDF and image export, printing</li>
+      </ul>
+      <div class="fmt"><code>.pptx</code><code>.pptm</code><code>.ppsx</code><code>.potx</code></div>
+    </div>
   </div>
 </div></section>
 
@@ -162,7 +182,7 @@ html[lang=en] [data-en]{display:revert}
   <p class="sub"><span data-el>Χωρίς δικαιώματα διαχειριστή.</span><span data-en>No administrator rights needed.</span></p>
   <ol class="steps">
     <li><span data-el>Κατέβασε και άνοιξε το <b>Suite_Setup.exe</b>.</span><span data-en>Download and open <b>Suite_Setup.exe</b>.</span></li>
-    <li><span data-el>Τσέκαρε <b>DOC</b>, <b>XLS</b> ή και τα δύο.</span><span data-en>Tick <b>DOC</b>, <b>XLS</b> or both.</span></li>
+    <li><span data-el>Τσέκαρε <b>DOC</b>, <b>XLS</b>, <b>PPT</b> ή όποιο συνδυασμό θέλεις.</span><span data-en>Tick <b>DOC</b>, <b>XLS</b>, <b>PPT</b> or any combination.</span></li>
     <li><span data-el>Πάτα <b>Εγκατάσταση</b>. Οι εφαρμογές μπαίνουν στο μενού Έναρξη.</span><span data-en>Press <b>Install</b>. The apps appear in the Start menu.</span></li>
   </ol>
 </div></section>
@@ -178,7 +198,7 @@ html[lang=en] [data-en]{display:revert}
     </div>
     <div class="card">
       <h3><span data-el>Χωρίς σύνδεση</span><span data-en>Offline</span></h3>
-      <p><span data-el>Περιέχει και τις δύο εφαρμογές (περίπου 18 MB). Για υπολογιστές χωρίς internet ή για αντίγραφο σε USB.</span><span data-en>Contains both apps (about 18 MB). For computers without internet, or to keep on a USB stick.</span></p>
+      <p><span data-el>Περιέχει και τις τρεις εφαρμογές. Για υπολογιστές χωρίς internet ή για αντίγραφο σε USB.</span><span data-en>Contains all three apps. For computers without internet, or to keep on a USB stick.</span></p>
       <a class="btn alt" href="https://github.com/vasileiostripolidis/suite-releases/releases/latest/download/Suite_Setup_Offline.exe">Suite_Setup_Offline.exe ↓</a>
     </div>
   </div>
