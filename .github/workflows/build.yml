@@ -1,0 +1,93 @@
+# Χτίζει τα δύο προγράμματα εγκατάστασης (online και offline με τις τελευταίες εκδόσεις των εφαρμογών),
+# τα δοκιμάζει σε Windows (σιωπηλή εγκατάσταση και έλεγχος ότι εγκαταστάθηκαν) και τα δημοσιεύει ως νέα έκδοση.
+# Τρέχει όταν αλλάζει το installer/, χειροκίνητα, ή όταν βγαίνει νέα έκδοση εφαρμογής (repository_dispatch: app-released).
+name: Χτίσιμο, δοκιμή και δημοσίευση
+
+on:
+  push:
+    branches: [main]
+    paths: ['installer/**', '.github/workflows/build.yml']
+  workflow_dispatch:
+  repository_dispatch:
+    types: [app-released]
+
+permissions:
+  contents: write
+
+concurrency: { group: build, cancel-in-progress: true }
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+      apps: ${{ steps.v.outputs.apps }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq nsis
+      - name: Τελευταίες εκδόσεις εφαρμογών
+        id: v
+        run: |
+          set -e
+          mkdir -p apps out
+          get() { # όνομα, latest.json
+            J=$(curl -fsSL "$2"); U=$(echo "$J" | jq -r '.platforms["windows-x86_64"].url'); V=$(echo "$J" | jq -r .version)
+            curl -fsSL -o "apps/$1.exe" "$U"; echo "$1 $V"; }
+          A=$(get DOC https://github.com/vasileiostripolidis/doc-releases/releases/latest/download/latest.json)
+          B=$(get XLS https://raw.githubusercontent.com/vasileiostripolidis/xls-releases/main/latest.json)
+          echo "apps=$A · $B" >> "$GITHUB_OUTPUT"
+          echo "version=1.0.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+      - name: makensis
+        run: |
+          cd installer
+          makensis -V2 -DVERSION=${{ steps.v.outputs.version }} suite.nsi
+          makensis -V2 -DOFFLINE -DVERSION=${{ steps.v.outputs.version }} -DDOC_EXE=../apps/DOC.exe -DXLS_EXE=../apps/XLS.exe suite.nsi
+          mv Suite_Setup.exe Suite_Setup_Offline.exe ../out/
+      - uses: actions/upload-artifact@v4
+        with: { name: suite, path: out/*.exe }
+
+  test:
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { name: suite }
+      - name: Σιωπηλή εγκατάσταση και έλεγχος
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          function Installed($n) { Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\$n" }
+          function Run($exe, $apps) { $p = Start-Process -FilePath ".\$exe" -ArgumentList '/S', "/APPS=$apps" -Wait -PassThru; "$exe /APPS=$apps → κωδικός $($p.ExitCode)"; if ($p.ExitCode -ne 0) { throw "αποτυχία $exe" } }
+          function Uninstall($n) { $k = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\$n"; $u = (Get-ItemProperty $k).UninstallString -replace '"', ''; Start-Process -FilePath $u -ArgumentList '/S' -Wait; Start-Sleep 3 }
+          # 1. online: μόνο XLS
+          Run 'Suite_Setup.exe' 'xls'
+          if (-not (Installed 'XLS')) { throw 'Το XLS δεν εγκαταστάθηκε' }; if (Installed 'DOC') { throw 'Εγκαταστάθηκε DOC χωρίς να επιλεγεί' }
+          "XLS: " + (Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\XLS').DisplayVersion
+          # 2. online: και τα δύο (το XLS ενημερώνεται)
+          Run 'Suite_Setup.exe' 'doc,xls'
+          if (-not ((Installed 'DOC') -and (Installed 'XLS'))) { throw 'Δεν εγκαταστάθηκαν και τα δύο' }
+          # 3. offline: απεγκατάσταση και εγκατάσταση μόνο του DOC
+          Uninstall 'DOC'; Uninstall 'XLS'
+          if ((Installed 'DOC') -or (Installed 'XLS')) { throw 'Η απεγκατάσταση δεν ολοκληρώθηκε' }
+          Run 'Suite_Setup_Offline.exe' 'doc'
+          if (-not (Installed 'DOC')) { throw 'Το offline δεν εγκατέστησε το DOC' }; if (Installed 'XLS') { throw 'Το offline εγκατέστησε XLS χωρίς επιλογή' }
+          "DOC: " + (Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\DOC').DisplayVersion
+          'Όλοι οι έλεγχοι πέρασαν.'
+
+  publish:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { name: suite }
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.build.outputs.version }}
+          name: Suite ${{ needs.build.outputs.version }}
+          body: |
+            Περιέχει: ${{ needs.build.outputs.apps }}
+
+            **Suite_Setup.exe**: μικρό, κατεβάζει την τελευταία έκδοση μόνο των εφαρμογών που επιλέγεις.
+            **Suite_Setup_Offline.exe**: περιέχει τις εφαρμογές, για υπολογιστές χωρίς Internet.
+          files: '*.exe'
+          make_latest: true
