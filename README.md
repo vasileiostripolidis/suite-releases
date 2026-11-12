@@ -106,7 +106,7 @@ Opens and saves PowerPoint files. Slide layouts and themes, text with bullets an
 | Installer | Size | When to use it |
 |:--|:--|:--|
 | `Suite_Setup.exe` | ~200 KB | Normal choice. Fetches the latest version of the apps you pick |
-| `Suite_Setup_Offline.exe` | ~25 MB | Computers without internet, or a copy to keep on a USB stick |
+| `Suite_Setup_Offline.exe` | ~21 MB | Computers without internet, or a copy to keep on a USB stick |
 
 Windows 10 / 11, 64-bit. The installers are not code-signed yet, so SmartScreen may ask once: *More info → Run anyway*. Run the installer again any time to add another app.
 
