@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suite: DOC & XLS</title>
+<meta name="description" content="Suite: ελαφριά σουίτα γραφείου για Windows. DOC για κείμενα (Word), XLS για υπολογιστικά φύλλα (Excel). Δωρεάν, χωρίς σύνδεση, χωρίς παρακολούθηση.">
+<meta name="theme-color" content="#0d1117">
+<link rel="icon" href="suite.png" type="image/png">
+<meta property="og:title" content="Suite: DOC & XLS">
+<meta property="og:description" content="A light, private office suite for Windows.">
+<meta property="og:image" content="https://vasileiostripolidis.github.io/suite-releases/suite.png">
+<style>
+:root{--bg:#0b0e13;--panel:#12161d;--line:#232a35;--text:#eef1f5;--mute:#9aa4b2;--gold:#e2bd5a;--blue:#3b6fc4;--green:#1f7c48;--r:18px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter,"Segoe UI",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+header{position:sticky;top:0;z-index:5;background:rgba(11,14,19,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;gap:12px;height:60px}
+header img{width:28px;height:28px}
+header b{font-size:18px;letter-spacing:.2px}
+header nav{margin-left:auto;display:flex;gap:18px;align-items:center;font-size:14px;color:var(--mute)}
+header nav a{text-decoration:none}
+header nav a:hover{color:var(--text)}
+.lang{border:1px solid var(--line);background:none;color:var(--text);border-radius:999px;padding:4px 12px;font:inherit;font-size:13px;cursor:pointer}
+.hero{position:relative;padding:88px 0 64px;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:-200px -200px auto auto;width:700px;height:700px;background:radial-gradient(closest-side,rgba(226,189,90,.16),transparent);pointer-events:none}
+.hero .wrap{display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:center}
+.tag{color:var(--gold);font-weight:700;letter-spacing:2px;font-size:13px;text-transform:uppercase}
+h1{font-size:clamp(40px,6vw,64px);line-height:1.05;margin:12px 0 18px;letter-spacing:-1.5px}
+.lead{color:var(--mute);font-size:19px;max-width:560px;margin:0 0 30px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-weight:700;text-decoration:none;border:1px solid var(--line)}
+.btn.main{background:var(--gold);color:#1a1405;border-color:var(--gold)}
+.btn.main:hover{filter:brightness(1.07)}
+.btn.alt:hover{background:var(--panel)}
+.small{color:var(--mute);font-size:13px;margin-top:14px}
+.stack{position:relative;height:320px}
+.stack img{position:absolute;width:210px;filter:drop-shadow(0 24px 40px rgba(0,0,0,.55))}
+.stack .d{left:8%;top:0;transform:rotate(-8deg)}
+.stack .x{left:42%;top:60px;transform:rotate(6deg)}
+section{padding:56px 0;border-top:1px solid var(--line)}
+h2{font-size:30px;letter-spacing:-.5px;margin:0 0 8px}
+.sub{color:var(--mute);margin:0 0 32px}
+.apps{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:28px;position:relative;overflow:hidden}
+.card:before{content:"";position:absolute;inset:0 0 auto 0;height:3px}
+.card.doc:before{background:var(--blue)}
+.card.xls:before{background:var(--green)}
+.card .head{display:flex;gap:16px;align-items:center;margin-bottom:14px}
+.card .head img{width:56px;height:56px}
+.card h3{margin:0;font-size:22px}
+.card .head span{color:var(--mute);font-size:14px}
+.card ul{margin:0;padding-left:20px;color:#cfd5de}
+.card li{margin:4px 0}
+.fmt{margin-top:18px;display:flex;flex-wrap:wrap;gap:6px}
+.fmt code{font:12px/1 ui-monospace,Consolas,monospace;background:#0d1118;border:1px solid var(--line);border-radius:6px;padding:5px 7px;color:var(--mute)}
+.why{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.why div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+.why b{display:block;margin-bottom:6px}
+.why p{margin:0;color:var(--mute);font-size:14px}
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;list-style:none;padding:0;margin:0}
+.steps li{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 20px 20px 64px;position:relative;color:#cfd5de}
+.steps li:before{counter-increment:s;content:counter(s);position:absolute;left:20px;top:18px;width:30px;height:30px;border-radius:50%;background:var(--gold);color:#1a1405;font-weight:800;display:grid;place-items:center}
+.dl{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.dl .card p{color:var(--mute);margin:6px 0 18px}
+footer{border-top:1px solid var(--line);padding:28px 0 40px;color:var(--mute);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between}
+[data-en]{display:none}
+html[lang=en] [data-el]{display:none}
+html[lang=en] [data-en]{display:revert}
+@media (max-width:820px){
+ .hero{padding:56px 0 32px}
+ .hero .wrap,.apps,.dl,.steps{grid-template-columns:1fr}
+ .why{grid-template-columns:1fr 1fr}
+ .stack{height:220px}.stack img{width:150px}
+ header nav a{display:none}
+}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <img src="suite.png" alt=""><b>Suite</b>
+  <nav>
+    <a href="#apps"><span data-el>Εφαρμογές</span><span data-en>Apps</span></a>
+    <a href="#install"><span data-el>Εγκατάσταση</span><span data-en>Install</span></a>
+    <a href="#download"><span data-el>Λήψη</span><span data-en>Download</span></a>
+    <button class="lang" id="lang" type="button">English</button>
+  </nav>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <div>
+    <div class="tag"><span data-el>Δωρεάν · για Windows</span><span data-en>Free · for Windows</span></div>
+    <h1><span data-el>Η σουίτα γραφείου που δεν σε βαραίνει.</span><span data-en>The office suite that stays out of your way.</span></h1>
+    <p class="lead"><span data-el><b>DOC</b> για κείμενα και <b>XLS</b> για υπολογιστικά φύλλα. Ανοίγουν και αποθηκεύουν αρχεία Word και Excel, δουλεύουν χωρίς internet και δεν στέλνουν τίποτα πουθενά.</span><span data-en><b>DOC</b> for documents and <b>XLS</b> for spreadsheets. They open and save Word and Excel files, work offline and send nothing anywhere.</span></p>
+    <div class="cta">
+      <a class="btn main" href="https://github.com/vasileiostripolidis/suite-releases/releases/latest/download/Suite_Setup.exe"><span data-el>Λήψη για Windows</span><span data-en>Download for Windows</span> ↓</a>
+      <a class="btn alt" href="#apps"><span data-el>Τι περιέχει</span><span data-en>What's inside</span></a>
+    </div>
+    <div class="small"><span data-el>Ένα αρχείο εγκατάστασης· διαλέγεις εσύ τι θα εγκατασταθεί. Windows 10 / 11.</span><span data-en>One installer; you choose what gets installed. Windows 10 / 11.</span></div>
+  </div>
+  <div class="stack" aria-hidden="true"><img class="d" src="doc.png" alt=""><img class="x" src="xls.png" alt=""></div>
+</div></div>
+
+<section id="apps"><div class="wrap">
+  <h2><span data-el>Δύο εφαρμογές, ένα σπίτι</span><span data-en>Two apps, one home</span></h2>
+  <p class="sub"><span data-el>Εγκατέστησε τη μία, την άλλη ή και τις δύο. Η καθεμιά ενημερώνεται μόνη της.</span><span data-en>Install one, the other, or both. Each one keeps itself up to date.</span></p>
+  <div class="apps">
+    <div class="card doc">
+      <div class="head"><img src="doc.png" alt=""><div><h3>DOC</h3><span data-el>Επεξεργαστής κειμένου</span><span data-en>Word processor</span></div></div>
+      <ul data-el>
+        <li>Ανοίγει και αποθηκεύει αρχεία Word με τη μορφοποίησή τους</li>
+        <li>Πίνακες, εικόνες, σχήματα, εξισώσεις, κεφαλίδες και υποσέλιδα</li>
+        <li>Ορθογραφικός έλεγχος, παρακολούθηση αλλαγών και σχόλια</li>
+        <li>Εξαγωγή σε PDF, πρότυπα, συγχώνευση αλληλογραφίας</li>
+        <li>Μακροεντολές απενεργοποιημένες εξ ορισμού, για ασφάλεια</li>
+      </ul>
+      <ul data-en>
+        <li>Opens and saves Word files with their formatting</li>
+        <li>Tables, images, shapes, equations, headers and footers</li>
+        <li>Spell check, track changes and comments</li>
+        <li>PDF export, templates, mail merge</li>
+        <li>Macros off by default, for safety</li>
+      </ul>
+      <div class="fmt"><code>.docx</code><code>.docm</code><code>.dotx</code><code>.doc</code><code>.odt</code><code>.rtf</code><code>.pdf</code><code>.md</code><code>.htm</code><code>.txt</code></div>
+    </div>
+    <div class="card xls">
+      <div class="head"><img src="xls.png" alt=""><div><h3>XLS</h3><span data-el>Υπολογιστικά φύλλα</span><span data-en>Spreadsheets</span></div></div>
+      <ul data-el>
+        <li>Ανοίγει και αποθηκεύει αρχεία Excel, μαζί με τους τύπους τους</li>
+        <li>Γραφήματα, συγκεντρωτικοί πίνακες, φίλτρα και μορφοποίηση υπό όρους</li>
+        <li>Λήψη και μετασχηματισμός δεδομένων, μοντέλο δεδομένων</li>
+        <li>Παρακολούθηση αλλαγών, θέματα, προσωπικά πρότυπα</li>
+        <li>Μακροεντολές απενεργοποιημένες εξ ορισμού, για ασφάλεια</li>
+      </ul>
+      <ul data-en>
+        <li>Opens and saves Excel files, formulas included</li>
+        <li>Charts, pivot tables, filters and conditional formatting</li>
+        <li>Get &amp; transform data, data model</li>
+        <li>Track changes, themes, personal templates</li>
+        <li>Macros off by default, for safety</li>
+      </ul>
+      <div class="fmt"><code>.xlsx</code><code>.xlsm</code><code>.xltx</code><code>.xls</code><code>.ods</code><code>.csv</code><code>.tsv</code></div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="why">
+    <div><b><span data-el>Ελαφριές</span><span data-en>Light</span></b><p><span data-el>Ανοίγουν γρήγορα και πιάνουν λίγο χώρο.</span><span data-en>They start fast and take little space.</span></p></div>
+    <div><b><span data-el>Ιδιωτικές</span><span data-en>Private</span></b><p><span data-el>Χωρίς λογαριασμό, χωρίς διαφημίσεις, χωρίς παρακολούθηση.</span><span data-en>No account, no ads, no telemetry.</span></p></div>
+    <div><b><span data-el>Χωρίς σύνδεση</span><span data-en>Offline</span></b><p><span data-el>Τα αρχεία σου μένουν στον υπολογιστή σου.</span><span data-en>Your files stay on your computer.</span></p></div>
+    <div><b><span data-el>Δωρεάν</span><span data-en>Free</span></b><p><span data-el>Χωρίς συνδρομή, με αυτόματες ενημερώσεις.</span><span data-en>No subscription, automatic updates.</span></p></div>
+  </div>
+</div></section>
+
+<section id="install"><div class="wrap">
+  <h2><span data-el>Εγκατάσταση σε τρία βήματα</span><span data-en>Install in three steps</span></h2>
+  <p class="sub"><span data-el>Χωρίς δικαιώματα διαχειριστή.</span><span data-en>No administrator rights needed.</span></p>
+  <ol class="steps">
+    <li><span data-el>Κατέβασε και άνοιξε το <b>Suite_Setup.exe</b>.</span><span data-en>Download and open <b>Suite_Setup.exe</b>.</span></li>
+    <li><span data-el>Τσέκαρε <b>DOC</b>, <b>XLS</b> ή και τα δύο.</span><span data-en>Tick <b>DOC</b>, <b>XLS</b> or both.</span></li>
+    <li><span data-el>Πάτα <b>Εγκατάσταση</b>. Οι εφαρμογές μπαίνουν στο μενού Έναρξη.</span><span data-en>Press <b>Install</b>. The apps appear in the Start menu.</span></li>
+  </ol>
+</div></section>
+
+<section id="download"><div class="wrap">
+  <h2><span data-el>Λήψη</span><span data-en>Download</span></h2>
+  <p class="sub"><span data-el>Διάλεξε όποιο σου ταιριάζει. Και τα δύο εγκαθιστούν τις ίδιες εφαρμογές.</span><span data-en>Pick whichever suits you. Both install the same apps.</span></p>
+  <div class="dl">
+    <div class="card">
+      <h3><span data-el>Κανονικό</span><span data-en>Standard</span></h3>
+      <p><span data-el>Μικρό αρχείο (περίπου 200 KB). Κατεβάζει μόνο τις εφαρμογές που διαλέγεις, στην πιο πρόσφατη έκδοση. Χρειάζεται internet.</span><span data-en>Tiny file (about 200 KB). Downloads only the apps you pick, in their latest version. Needs internet.</span></p>
+      <a class="btn main" href="https://github.com/vasileiostripolidis/suite-releases/releases/latest/download/Suite_Setup.exe">Suite_Setup.exe ↓</a>
+    </div>
+    <div class="card">
+      <h3><span data-el>Χωρίς σύνδεση</span><span data-en>Offline</span></h3>
+      <p><span data-el>Περιέχει και τις δύο εφαρμογές (περίπου 18 MB). Για υπολογιστές χωρίς internet ή για αντίγραφο σε USB.</span><span data-en>Contains both apps (about 18 MB). For computers without internet, or to keep on a USB stick.</span></p>
+      <a class="btn alt" href="https://github.com/vasileiostripolidis/suite-releases/releases/latest/download/Suite_Setup_Offline.exe">Suite_Setup_Offline.exe ↓</a>
+    </div>
+  </div>
+  <p class="small"><span data-el>Όλες οι εκδόσεις και οι σημειώσεις τους: </span><span data-en>All releases and their notes: </span><a href="https://github.com/vasileiostripolidis/suite-releases/releases">github.com/vasileiostripolidis/suite-releases</a></p>
+</div></section>
+
+<footer><div class="wrap">
+  <span>© 2026 Τριπολίδης Βασίλειος · <span data-el>Δωρεάν χρήση, με επιφύλαξη παντός δικαιώματος.</span><span data-en>Free to use, all rights reserved.</span></span>
+  <span><a href="https://github.com/vasileiostripolidis"><span data-el>Περισσότερες εφαρμογές</span><span data-en>More apps</span></a> · <a href="https://github.com/vasileiostripolidis/suite-releases/issues"><span data-el>Αναφορά προβλήματος</span><span data-en>Report a problem</span></a></span>
+</div></footer>
+
+<script>
+(function(){
+  var h=document.documentElement,b=document.getElementById('lang');
+  function set(l){h.lang=l;b.textContent=l==='el'?'English':'Ελληνικά';try{localStorage.setItem('lang',l)}catch(e){}}
+  var saved=null;try{saved=localStorage.getItem('lang')}catch(e){}
+  set(saved||((navigator.language||'').slice(0,2)==='el'?'el':'en'));
+  b.onclick=function(){set(h.lang==='el'?'en':'el')};
+})();
+</script>
+</body>
+</html>
