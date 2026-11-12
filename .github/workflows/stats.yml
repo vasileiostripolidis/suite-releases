@@ -1,0 +1,27 @@
+# Ανανεώνει τον μετρητή λήψεων της σελίδας (κλάδος «site», φάκελος stats) κάθε 6 ώρες.
+# Γράφει μόνο όταν αλλάξουν οι αριθμοί. Δεν χρειάζεται κανένα secret.
+name: Download stats
+on:
+  schedule:
+    - cron: "41 */6 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: stats, cancel-in-progress: true }
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { sparse-checkout: .github/scripts, path: main }
+      - uses: actions/checkout@v4
+        with: { ref: site, path: site }
+      - run: node main/.github/scripts/stats.mjs site/stats
+        env: { GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+      - name: Commit
+        working-directory: site
+        run: |
+          git add stats
+          if git diff --cached --quiet; then echo "Χωρίς αλλαγές"; exit 0; fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "stats: ενημέρωση μετρητή λήψεων"
+          git push
